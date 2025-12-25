@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Euro-Asia Show Admin</title>
+    <link rel="stylesheet" href="admin-style.css">
+    <style>
+        /* Highlights uchun qo'shimcha kichik stillar */
+        .instagram-preview-box {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f0f2f5;
+            border-radius: 8px;
+            border: 1px dashed #ccc;
+        }
+        .upload-area {
+            border: 2px dashed #667eea;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .upload-area:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <h2>Euro-Asia Show</h2>
+            <p>Admin Panel</p>
+        </div>
+
+        <nav class="menu">
+            <a href="#" data-section="dashboard" class="menu-item active">
+                <span>📊</span> Dashboard
+            </a>
+            <a href="#" data-section="orders" class="menu-item">
+                <span>📨</span> Arizalar <span class="badge" id="ordersBadge">0</span>
+            </a>
+            <a href="#" data-section="calendar" class="menu-item">
+                <span>📅</span> Calendar
+            </a>
+            <a href="#" data-section="highlights" class="menu-item">
+                <span>📸</span> Highlights
+            </a>
+            <a href="#" data-section="news" class="menu-item">
+                <span>📰</span> Yangiliklar
+            </a>
+        </nav>
+
+        <div class="admin-info">
+            <p><strong id="adminName">Admin</strong></p>
+            <button class="logout-btn" onclick="logout()">🚪 Chiqish</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h1 id="pageTitle">Dashboard</h1>
+            <div class="header-actions">
+                <span id="currentDate"></span>
+            </div>
+        </div>
+
+        <div class="section active" id="dashboard-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📨</div>
+                    <div class="stat-info">
+                        <h3 id="pendingOrdersCount">0</h3>
+                        <p>Kutilayotgan arizalar</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-info">
+                        <h3 id="busyDaysCount">0</h3>
+                        <p>Band kunlar (bu oy)</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📸</div>
+                    <div class="stat-info">
+                        <h3 id="pendingHighlightsCount">0</h3>
+                        <p>Highlights kutilayapti</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📰</div>
+                    <div class="stat-info">
+                        <h3 id="newsCount">0</h3>
+                        <p>Nashr qilingan yangiliklar</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recent-activity">
+                <h2>So'nggi arizalar</h2>
+                <div id="recentOrders"></div>
+            </div>
+        </div>
+
+        <div class="section" id="orders-section">
+            <div class="section-header">
+                <h2>Arizalar boshqaruvi</h2>
+                <div class="filters">
+                    <button class="filter-btn active" data-filter="all">Hammasi</button>
+                    <button class="filter-btn" data-filter="pending">Kutilmoqda</button>
+                    <button class="filter-btn" data-filter="accepted">Qabul qilingan</button>
+                    <button class="filter-btn" data-filter="rejected">Rad etilgan</button>
+                </div>
+            </div>
+            <div id="ordersList"></div>
+        </div>
+
+        <div class="section" id="calendar-section">
+            <div class="section-header">
+                <h2>Calendar boshqaruvi</h2>
+                <button class="btn btn-primary" onclick="showAddBusyDateModal()">+ Band kun qo'shish</button>
+            </div>
+            <div class="calendar-legend">
+                <span><span class="legend-box free"></span> Bo'sh</span>
+                <span><span class="legend-box pending"></span> Kutilmoqda</span>
+                <span><span class="legend-box busy"></span> Band</span>
+            </div>
+            <div id="calendarView"></div>
+        </div>
+
+        <div class="section" id="highlights-section">
+            <div class="section-header">
+                <h2>Highlights (O'tgan tadbirlar)</h2>
+            </div>
+            <div id="pastEventsList"></div>
+        </div>
+
+        <div class="section" id="news-section">
+            <div class="section-header">
+                <h2>Yangiliklar</h2>
+                <button class="btn btn-primary" onclick="showAddNewsModal()">+ Yangilik qo'shish</button>
+            </div>
+            <div id="newsList"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="orderModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('orderModal')">&times;</span>
+            <h2>Ariza tafsilotlari</h2>
+            <div id="orderDetails"></div>
+            <div class="modal-actions">
+                <button class="btn btn-success" id="acceptOrderBtn">✅ Qabul qilish</button>
+                <button class="btn btn-danger" id="rejectOrderBtn">❌ Rad etish</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="highlightsModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('highlightsModal')">&times;</span>
+            <h2>Highlights yuklash</h2>
+            <div id="highlightsEventInfo" style="margin: 15px 0; padding: 10px; background: #f8f9fa; border-radius: 5px; border-left: 4px solid #764ba2;"></div>
+            
+            <form id="highlightsForm">
+                <input type="hidden" id="highlightCalendarId">
+                
+                <div class="form-group">
+                    <label>Instagram Link (Reels yoki Post)</label>
+                    <input type="url" id="instagramUrl" placeholder="https://www.instagram.com/reels/..." required>
+                </div>
+
+                <div class="form-group">
+                    <label>Muqova rasmi (JPG/PNG)</label>
+                    <div class="upload-area" onclick="document.getElementById('highlightImage').click()">
+                        <p id="fileNameDisplay">📸 Rasm tanlash uchun bosing</p>
+                        <input type="file" id="highlightImage" accept="image/*" hidden onchange="document.getElementById('fileNameDisplay').innerText = this.files[0].name">
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="submit" class="btn btn-success">✅ Saqlash</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('highlightsModal')">Bekor qilish</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="newsModal">
+        <div class="modal-content large">
+            <span class="close" onclick="closeModal('newsModal')">&times;</span>
+            <h2 id="newsModalTitle">Yangilik qo'shish</h2>
+            <form id="newsForm">
+                <input type="hidden" id="newsId">
+                <div class="form-group">
+                    <label>Sarlavha</label>
+                    <input type="text" id="newsTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>Matn</label>
+                    <textarea id="newsContent" rows="6" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Rasm (ixtiyoriy)</label>
+                    <input type="file" id="newsImage" accept="image/*">
+                    <div id="currentImagePreview"></div>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="newsPublished" checked> Nashr qilish
+                    </label>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn btn-success">Saqlash</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('newsModal')">Bekor qilish</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin-script.js"></script>
+</body>
+</html>

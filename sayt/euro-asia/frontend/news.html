@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Euro-Asia - Yangiliklar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css"> <style>
+    /* news.html uchun maxsus stillar */
+    body {
+        background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+        min-height: 100vh;
+        padding-top: 100px; /* Header ostidan boshlash */
+        padding-bottom: 50px;
+    }
+
+    .news-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      background: rgba(10, 10, 10, 0.7); /* Fon rangini shaffof qilish */
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+    
+    .news-container h1 {
+        text-align: center;
+        color: var(--primary);
+        font-size: 2.5rem;
+        margin-bottom: 40px;
+        text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+    }
+
+    .news-list {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .news-item {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        padding: 25px;
+        border-left: 5px solid var(--accent);
+        transition: transform 0.3s, background 0.3s;
+    }
+
+    .news-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-5px);
+    }
+
+    .news-item h2 {
+        color: var(--secondary);
+        font-size: 1.6rem;
+        margin-bottom: 10px;
+    }
+
+    .news-date {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.5);
+        display: block;
+        margin-bottom: 15px;
+        border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+        padding-bottom: 5px;
+    }
+
+    .news-content p {
+        line-height: 1.6;
+        color: #ddd;
+    }
+    
+    .back-to-main {
+        display: inline-block;
+        margin-top: 30px;
+        padding: 10px 20px;
+        background: var(--primary);
+        color: var(--dark);
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: background 0.3s;
+    }
+    
+    .back-to-main:hover {
+        background: #00e693;
+    }
+    
+    /* Backend/Botdan ma'lumot kelishi kerakligi haqida eslatma */
+    .empty-state {
+        text-align: center;
+        padding: 50px;
+        border: 2px dashed rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-content">
+      <a href="main.html" class="logo-container">
+        <img src="logo.png" alt="Euro-Asia logo" class="logo-mini">
+        <span class="logo-glow"></span>
+      </a>
+      <h1 class="topbar-title">
+        <span class="title-gradient">Yangiliklar Sahifasi</span>
+      </h1>
+      </div>
+  </header>
+  
+  <div class="news-container">
+    <h1><span style="color:white;">Euro-Asia</span> Yangiliklar</h1>
+    
+    <div class="news-list" id="newsList">
+        <div class="empty-state">
+            <p>Hozircha joylangan yangiliklar mavjud emas.</p>
+        </div>
+        
+        </div>
+    
+    <div style="text-align: center;">
+        <a href="main.html" class="back-to-main">← Asosiy Sahifaga Qaytish</a>
+    </div>
+  </div>
+  <script src="api.js"></script>
+  </body>
+</html>

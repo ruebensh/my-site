@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Euro-Asia - To'y Highlights</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+  <style>
+    /* highlights.html uchun maxsus stillar */
+    body {
+        background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+        min-height: 100vh;
+        padding-top: 100px;
+        padding-bottom: 50px;
+    }
+
+    .highlights-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+      background: rgba(10, 10, 10, 0.7);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+    
+    .highlights-container h1 {
+        text-align: center;
+        color: var(--secondary);
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+    }
+    
+    .highlights-date {
+        color: var(--primary);
+        font-size: 1.5rem;
+        margin-bottom: 30px;
+    }
+
+    .video-area {
+        position: relative;
+        width: 100%;
+        padding-top: 56.25%; /* 16:9 nisbat */
+        margin-bottom: 30px;
+        background: #000;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    }
+
+    .video-area iframe,
+    .video-area video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+    
+    .description-text {
+        font-size: 1.1rem;
+        color: #ddd;
+        line-height: 1.6;
+        padding: 0 20px;
+    }
+    
+    .back-to-calendar {
+        display: inline-block;
+        margin-top: 30px;
+        padding: 10px 20px;
+        background: var(--accent);
+        color: white;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: background 0.3s;
+    }
+    
+    .back-to-calendar:hover {
+        background: #ff3388;
+    }
+
+    /* Backend/Botdan ma'lumot kelishi kerakligi haqida eslatma */
+    .placeholder-video {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 2rem;
+        background: #1a1a1a;
+    }
+  </style>
+</head>
+<body>
+  <div class="highlights-container">
+    <h1>🎉 To'y Highlights</h1>
+    <p class="highlights-date" id="highlightDateDisplay">05 Oktyabr 2025</p>
+    
+    <div class="video-area">
+        <div class="placeholder-video">
+            Bot orqali video/havola joylanishi kutilmoqda...
+        </div>
+    </div>
+    
+    <p class="description-text">
+        Bu yerdagi video/rasmlar band qilingan sanada bo'lib o'tgan tadbirdan olingan eng qiziqarli lavhalardir. 
+        Euro-Asia Show Group bilan to'yingizni unutilmas qiling!
+    </p>
+    
+    <div style="text-align: center;">
+        <a href="calendar.html" class="back-to-calendar">← Kalendar sahifasiga qaytish</a>
+    </div>
+  </div>
+  
+  <script>
+    // URL dan sanani olib, uni sahifada ko'rsatish
+    const urlParams = new URLSearchParams(window.location.search);
+    const date = urlParams.get('date');
+    if (date) {
+        document.getElementById('highlightDateDisplay').textContent = date;
+    } else {
+        document.getElementById('highlightDateDisplay').textContent = 'Sana topilmadi';
+    }
+    
+    // Aslida bu yerda URL ga asosan ma'lumotlar bazasidan video linki yuklanishi kerak.
+  </script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+/* Umumiy sozlamalar */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: radial-gradient(circle at center, #0a0a0a 0%, #000 70%);
+  font-family: 'Poppins', sans-serif;
+  color: #fff;
+}
+
+/* INTRO sahnasi */
+.intro {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  background: #000;
+}
+
+/* CHAQMOQ effekti */
+.flash-overlay {
+  position: absolute;
+  inset: 0;
+  background: white;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  mix-blend-mode: screen;
+  z-index: 10;
+}
+
+/* Markazdagi aylana */
+.circle {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(180,180,180,0.18), rgba(40,40,40,0.02) 70%);
+  animation: slow-spin 8s linear infinite;
+  z-index: 1;
+}
+
+/* LOGO sozlamalari */
+.logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 240px;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(1.3);
+  filter: drop-shadow(0 0 15px rgba(255,215,0,0.6));
+  transition: all 1.5s ease;
+  z-index: 5;
+}
+
+/* Paydo bo‘lish */
+.logo.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  filter: drop-shadow(0 0 35px rgba(255,215,0,1)) drop-shadow(0 0 80px rgba(255,255,200,0.4));
+}
+
+/* eski .logo.move ni olib tashlang */
+
+/* yangi vanish effekti */
+.logo.vanish {
+  transform: translate(-50%, -50%) scale(10);
+  opacity: 0;
+  filter: blur(30px) brightness(2);
+  transition: transform 2s ease-in, opacity 2s ease-in, filter 2s ease-in;
+}
+
+/* KONTENT */
+.content {
+  opacity: 0;
+  transition: opacity 2s ease;
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.content.visible {
+  opacity: 1;
+}
+
+/* HERO markazda bo‘lishi uchun */
+.hero {
+  text-align: center;
+  animation: fadeInUp 2s ease forwards;
+}
+
+.hero h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  opacity: 0.8;
+}
+
+/* LOGO MINI */
+.logo-mini {
+  position: absolute;
+  top: 20px;
+  left: 25px;
+  width: 80px;
+  display: none;
+}
+
+/* BLUR ekran */
+.blur-overlay {
+  position: fixed;
+  inset: 0;
+  backdrop-filter: blur(40px);
+  background: rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  pointer-events: none;
+  transition: backdrop-filter 2s ease, opacity 2s ease;
+  z-index: 8;
+}
+
+.blur-overlay.active {
+  opacity: 1;
+  backdrop-filter: blur(40px);
+}
+
+.blur-overlay.clear {
+  opacity: 0;
+  backdrop-filter: blur(0px);
+}
+
+
+/* ANIMATSIYALAR */
+@keyframes slow-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Euro-Asia Show Group - Calendar</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .back-btn {
+      position: fixed;
+      top: 30px;
+      left: 30px;
+      padding: 12px 20px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 50px;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      z-index: 1001;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.05);
+      border-color: white;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.5rem;
+      color: #333;
+      margin-bottom: 30px;
+    }
+
+    .legend {
+      display: flex;
+      gap: 30px;
+      margin-bottom: 30px;
+      padding-left: 20px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1rem;
+      color: #555;
+    }
+
+    .legend-box {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      border: 2px solid #ddd;
+    }
+
+    .legend-box.available {
+      background: white;
+    }
+
+    .legend-box.busy {
+      background: #9e9e9e;
+    }
+
+    .month-section {
+      margin-bottom: 50px;
+    }
+
+    .month-header {
+      font-size: 1.8rem;
+      color: #667eea;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid #667eea;
+    }
+
+    .weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .weekday {
+      text-align: center;
+      font-weight: 600;
+      color: #666;
+      padding: 10px;
+      font-size: 0.9rem;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .day-button {
+      aspect-ratio: 1;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: white;
+      color: #333;
+      position: relative;
+    }
+
+    .day-button.empty {
+      background: transparent;
+      border: none;
+      cursor: default;
+    }
+
+    .day-button:not(.empty):hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .day-button.busy {
+      background: #9e9e9e;
+      color: white;
+      cursor: pointer;
+    }
+
+    .day-button.busy:hover {
+      background: #757575;
+    }
+
+    .day-button.today {
+      border: 3px solid #4CAF50;
+      font-weight: 700;
+    }
+    
+    .day-button.past-unavailable {
+      cursor: default !important;
+      opacity: 0.6;
+    }
+    
+    .day-button.past-unavailable:hover {
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      overflow-y: auto;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      max-width: 600px;
+      width: 90%;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      animation: modalSlide 0.3s ease;
+      margin: 20px;
+    }
+
+    @keyframes modalSlide {
+      from {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .modal-content h2 {
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+    }
+
+    .modal-content p {
+      color: #666;
+      font-size: 1.1rem;
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+
+    .modal-btn {
+      padding: 15px 40px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 5px;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #45a049;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(76,175,80,0.4);
+    }
+
+    .btn-secondary {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+    }
+
+    .btn-close {
+      background: #f44336;
+      color: white;
+      margin-top: 10px;
+    }
+
+    .btn-close:hover {
+      background: #da190b;
+    }
+
+    .form-group {
+      margin: 20px 0;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 600;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .success-message {
+      background: #4CAF50;
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      .month-header {
+        font-size: 1.4rem;
+      }
+      
+      .day-button {
+        font-size: 0.9rem;
+      }
+    }
+   
+  </style>
+</head>
+<body>
+
+  <a href="main.html" style="color: #333;" class="back-btn">
+    ← Asosiy
+  </a>
+
+  <div class="container">
+    <h1>📅 Calendar</h1>
+    
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-box available"></div>
+        <span>Bo'sh kunlar</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-box busy"></div>
+        <span>Band kunlar</span>
+      </div>
+    </div>
+
+    <div id="calendars"></div>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="modal-content" id="modalContent"></div>
+  </div>
+
+  <!-- API Integration -->
+  <script src="api.js"></script>
+
+  <script>
+    const ADMIN_EMAIL = "admin@euroasiashow.uz";
+    const ADMIN_PHONE = "+998901234567";
+    
+    // Band kunlar - API'dan yuklanadi
+    let adminBusyDays = [];
+
+    const monthNames = [
+      "Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun",
+      "Iyul", "Avgust", "Sentyabr", "Oktyabr", "Noyabr", "Dekabr"
+    ];
+
+    const weekDays = ["Dush", "Sesh", "Chor", "Pay", "Jum", "Shan", "Yak"];
+
+    const calendarsContainer = document.getElementById("calendars");
+    const modal = document.getElementById("modal");
+    const modalContent = document.getElementById("modalContent");
+
+    const today = new Date();
+    today.setHours(23, 59, 59, 999);
+    
+    const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth();
+
+    function getDayStatus(date) {
+        const dateStr = date.toISOString().split("T")[0];
+        const dateEndOfDay = new Date(date);
+        dateEndOfDay.setHours(23, 59, 59, 999);
+
+        const isBusy = adminBusyDays.includes(dateStr);
+        const isPast = dateEndOfDay < today;
+        
+        if (isBusy) {
+            return isPast ? 'BUSY_PAST_HIGHLIGHTS' : 'BUSY_FUTURE'; 
+        } else if (isPast) {
+            return 'PAST_UNAVAILABLE';
+        } else {
+            return 'AVAILABLE';
+        }
+    }
+
+    function createYearCalendar() {
+      for (let i = 0; i < 12; i++) {
+        const monthDate = new Date(currentYear, currentMonth + i, 1);
+        const year = monthDate.getFullYear();
+        const month = monthDate.getMonth();
+        
+        createMonthCalendar(year, month);
+      }
+    }
+
+    function createMonthCalendar(year, month) {
+      const monthSection = document.createElement("div");
+      monthSection.classList.add("month-section");
+
+      const header = document.createElement("div");
+      header.classList.add("month-header");
+      header.textContent = `${monthNames[month]} ${year}`;
+      monthSection.appendChild(header);
+
+      const weekdaysDiv = document.createElement("div");
+      weekdaysDiv.classList.add("weekdays");
+      weekDays.forEach(day => {
+        const dayDiv = document.createElement("div");
+        dayDiv.classList.add("weekday");
+        dayDiv.textContent = day;
+        weekdaysDiv.appendChild(dayDiv);
+      });
+      monthSection.appendChild(weekdaysDiv);
+
+      const grid = document.createElement("div");
+      grid.classList.add("calendar-grid");
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      const startDayIndex = firstDay === 0 ? 6 : firstDay - 1; 
+      for (let i = 0; i < startDayIndex; i++) {
+        const emptyDiv = document.createElement("div");
+        emptyDiv.classList.add("day-button", "empty");
+        grid.appendChild(emptyDiv);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(year, month, day);
+        const dateStr = date.toISOString().split("T")[0];
+
+        const btn = document.createElement("button");
+        btn.textContent = day;
+        btn.classList.add("day-button");
+
+        const todayStr = new Date(currentYear, currentMonth, new Date().getDate()).toISOString().split("T")[0];
+        if (dateStr === todayStr) {
+          btn.classList.add("today");
+        }
+
+        const status = getDayStatus(date);
+        
+        if (status === 'AVAILABLE') {
+            btn.addEventListener("click", () => showAvailableDayModal(date, day, month, year));
+        } else if (status === 'BUSY_FUTURE') {
+            btn.classList.add("busy");
+            btn.addEventListener("click", () => showBusyDayModal(date, day, month, year, false)); 
+        } else if (status === 'BUSY_PAST_HIGHLIGHTS') {
+            btn.classList.add("busy");
+            btn.addEventListener("click", () => showBusyDayModal(date, day, month, year, true)); 
+        } else if (status === 'PAST_UNAVAILABLE') {
+            btn.classList.add("busy", "past-unavailable");
+            btn.disabled = true; 
+        }
+
+        grid.appendChild(btn);
+      }
+
+      monthSection.appendChild(grid);
+      calendarsContainer.appendChild(monthSection);
+    }
+
+    function showAvailableDayModal(date, day, month, year) {
+      const dayIndex = date.getDay();
+      const dayName = weekDays[dayIndex === 0 ? 6 : dayIndex - 1];
+      
+      modalContent.innerHTML = `
+        <h2>✅ ${day} ${monthNames[month]}, ${year}</h2>
+        <p><strong>${dayName}</strong></p>
+        <p>Bu kunda sizga hizmat ko'rsata olamiz!</p>
+        <p>To'yingizni unutilmas qiling - Euro-Asia Show bilan!</p>
+        <button class="modal-btn btn-primary" onclick="showBookingForm('${date.toISOString().split("T")[0]}', '${day} ${monthNames[month]}, ${year}')">
+          📞 Buyurtmaga ariza topshirish
+        </button>
+        <button class="modal-btn btn-close" onclick="closeModal()">
+          Yopish
+        </button>
+      `;
+      modal.classList.add("active");
+    }
+
+    function showBusyDayModal(date, day, month, year, showHighlightsBtn) {
+      const dayIndex = date.getDay();
+      const dayName = weekDays[dayIndex === 0 ? 6 : dayIndex - 1];
+      const dateDisplay = `${day} ${monthNames[month]}, ${year}`;
+      const dateStr = date.toISOString().split("T")[0];
+      
+      let highlightsBtnHTML = '';
+      let infoText = 'Boshqa kunlarni ko\'rib chiqing yoki to\'y lavhalarini tomosha qiling!';
+
+      if (showHighlightsBtn) {
+         highlightsBtnHTML = `
+            <a href="highlights.html?date=${encodeURIComponent(dateStr)}" class="modal-btn btn-secondary">
+              🎉 Highlights
+            </a>
+         `;
+      } else {
+         infoText = 'Afsuski, biz bu kuni bandmiz. Boshqa kunlarni ko\'rib chiqing.';
+         highlightsBtnHTML = ''; 
+      }
+      
+      modalContent.innerHTML = `
+        <h2>❌ ${day} ${monthNames[month]}, ${year}</h2>
+        <p><strong>${dayName}</strong></p>
+        <p>Afsuski, biz bu kuni bandmiz.</p>
+        <p>${infoText}</p>
+        ${highlightsBtnHTML}
+        <button class="modal-btn btn-close" onclick="closeModal()">
+          Yopish
+        </button>
+      `;
+      modal.classList.add("active");
+    }
+
+    function showBookingForm(dateStr, dateDisplay) {
+      modalContent.innerHTML = `
+        <h2>📝 Buyurtma Arizasi</h2>
+        <p><strong>Tanlangan sana:</strong> ${dateDisplay}</p>
+        
+        <form id="bookingForm" onsubmit="submitBooking(event, '${dateStr}', '${dateDisplay}')">
+          <div class="form-group">
+            <label>Ismingiz *</label>
+            <input type="text" id="name" required placeholder="To'liq ismingiz">
+          </div>
+          
+          <div class="form-group">
+            <label>Telefon raqamingiz *</label>
+            <input type="tel" id="phone" required placeholder="+998 90 123 45 67">
+          </div>
+          
+          <div class="form-group">
+            <label>To'y joyi *</label>
+            <input type="text" id="location" required placeholder="Toshkent, Chilonzor...">
+          </div>
+          
+          <div class="form-group">
+            <label>To'y vaqti</label>
+            <input type="text" id="eventTime" placeholder="18:00 yoki Kechki payt">
+          </div>
+          
+          <div class="form-group">
+            <label>Qo'shimcha ma'lumot</label>
+            <textarea id="message" placeholder="Maxsus talablaringiz yoki savollaringiz..."></textarea>
+          </div>
+          
+          <button type="submit" class="modal-btn btn-primary">
+            ✉️ Ariza yuborish
+          </button>
+          <button type="button" class="modal-btn btn-close" onclick="closeModal()">
+            Bekor qilish
+          </button>
+        </form>
+      `;
+      modal.classList.add("active");
+    }
+
+    async function submitBooking(event, dateStr, dateDisplay) {
+      event.preventDefault();
+      
+      const name = document.getElementById("name").value;
+      const phone = document.getElementById("phone").value;
+      const location = document.getElementById("location").value;
+      const eventTime = document.getElementById("eventTime").value;
+      const message = document.getElementById("message").value;
+
+      const orderData = {
+        date: dateStr,
+        name: name,
+        phone: phone,
+        location: location,
+        eventTime: eventTime,
+        message: message
+      };
+
+      // API'ga yuborish
+      const success = await sendOrderToAPI(orderData);
+
+      if (success) {
+        modalContent.innerHTML = `
+          <div class="success-message">
+            <h2>✅ Ariza muvaffaqiyatli yuborildi!</h2>
+            <p>Rahmat, ${name}!</p>
+            <p>Sizning arizangiz qabul qilindi.</p>
+            <p><strong>Tanlangan sana:</strong> ${dateDisplay}</p>
+          </div>
+          <p style="margin-top: 20px;">
+            Administratorimiz tez orada siz bilan bog'lanadi.
+          </p>
+          <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-top: 20px;">
+            <p><strong>Aloqa:</strong></p>
+            <p>📞 ${ADMIN_PHONE}</p>
+            <p>📧 ${ADMIN_EMAIL}</p>
+          </div>
+          <button class="modal-btn btn-primary" onclick="closeModal()">
+            OK
+          </button>
+        `;
+      } else {
+        alert('Xatolik yuz berdi. Iltimos, qayta urinib ko\'ring yoki bizga qo\'ng\'iroq qiling.');
+      }
+    }
+
+    function closeModal() {
+      modal.classList.remove("active");
+    }
+
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+    
+    // API'dan band kunlarni yuklash va calenderni yaratish
+    async function initCalendar() {
+        await loadBusyDaysFromAPI();
+        createYearCalendar();
+    }
+    
+    // Sahifa yuklanganda
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCalendar);
+    } else {
+        initCalendar();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <link rel="stylesheet" href="api-styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Euro-Asia Show Group</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <!-- Animated Background -->
+  <canvas id="particles"></canvas>
+  
+  <!-- Gradient Overlay -->
+  <div class="gradient-overlay"></div>
+
+  <!-- Header / Topbar -->
+  <header class="topbar">
+    <div class="topbar-content">
+      <a href="main.html" class="logo-container">
+        <img src="logo.png" alt="Euro-Asia logo" class="logo-mini">
+        <span class="logo-glow"></span>
+      </a>
+      <h1 class="topbar-title">
+        <span class="title-gradient">Euro-Asia Show Group</span>
+      </h1>
+      <button class="menu-btn" id="menuBtn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="hero">
+    <!-- Floating Welcome Text -->
+    <div class="floating-text">
+      <span class="text-shimmer">Asosiy menyuga xush kelibsiz</span>
+    </div>
+
+    <!-- Presentation Slideshow -->
+    <div class="presentation">
+      <video class="slide first" src="video2.mp4" muted playsinline></video>
+      <img class="slide" src="image1.jpeg" alt="Slide 1">
+      <img class="slide" src="image2.jpeg" alt="Slide 2">
+      <img class="slide" src="image3.jpeg" alt="Slide 3">
+      <img class="slide" src="image4.jpeg" alt="Slide 4">
+      <img class="slide" src="image5.jpeg" alt="Slide 5">
+      <img class="slide" src="image6.jpeg" alt="Slide 6">
+      <img class="slide" src="image7.jpeg" alt="Slide 7">
+      <video class="slide last" src="video2.mp4" muted playsinline></video>
+      <img class="slide final" src="image8.jpg" alt="Final Image">
+    </div>
+
+    <!-- Order Button -->
+    <button class="order-btn" id="orderBtn">
+      <span class="btn-content">
+        <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        Buyurtma rasmiylashtirish
+      </span>
+      <span class="btn-shine"></span>
+    </button>
+  </main>
+
+  <!-- Sidebar Menu -->
+  <aside class="sidebar" id="sidebar">
+    <button class="close-btn" id="closeBtn">
+      <span></span>
+      <span></span>
+    </button>
+    <nav class="sidebar-nav">
+      <ul class="menu-list">
+        <li class="menu-item">
+          <a href="news.html" class="menu-link">
+            <span class="menu-icon">📰</span>
+            <span class="menu-text">Yangiliklar</span>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="calendar.html" class="menu-link">
+            <span class="menu-icon">📅</span>
+            <span class="menu-text">Kalendar</span>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="#" class="menu-link" id="emailLink">
+            <span class="menu-icon">📧</span>
+            <span class="menu-text">Email</span>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="#" class="menu-link" id="socialLink">
+            <span class="menu-icon">🌐</span>
+            <span class="menu-text">Ijtimoiy tarmoqlar</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="sidebar-footer">
+      <p>© 2025 Euro-Asia Show</p>
+    </div>
+  </aside>
+
+  <!-- Overlay -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- EMAIL MODAL -->
+  <div class="info-modal" id="emailModal">
+    <div class="modal-box">
+      <button class="modal-close-btn" onclick="closeEmailModal()">✕</button>
+      <h3>📧 Bog'lanish Ma'lumotlari</h3>
+      <div class="modal-info">
+        <p class="modal-subtitle">Barcha savollar bo'yicha biz bilan bog'laning:</p>
+        
+        <a href="tel:+998901234567" class="info-link" target="_blank">
+          <span class="info-icon">📞</span>
+          <span>+998 (90) 123-45-67</span>
+        </a>
+        
+        <a href="mailto:admin@euroasiashow.uz" class="info-link" target="_blank">
+          <span class="info-icon">✉️</span>
+          <span>admin@euroasiashow.uz</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOCIAL MODAL -->
+  <div class="info-modal" id="socialModal">
+    <div class="modal-box">
+      <button class="modal-close-btn" onclick="closeSocialModal()">✕</button>
+      <h3>🌐 Ijtimoiy Tarmoqlar</h3>
+      <div class="social-list">
+        <a href="https://instagram.com/euroasiashow" target="_blank" class="social-item">
+          <span class="social-icon instagram">📸</span>
+          <div class="social-text">
+            <span class="social-name">Instagram</span>
+            <span class="social-desc">Eng so'nggi lavhalar</span>
+          </div>
+        </a>
+        
+        <a href="https://t.me/euroasiashow" target="_blank" class="social-item">
+          <span class="social-icon telegram">✈️</span>
+          <div class="social-text">
+            <span class="social-name">Telegram</span>
+            <span class="social-desc">Tezkor yangiliklar</span>
+          </div>
+        </a>
+        
+        <a href="https://youtube.com/@euroasiashow" target="_blank" class="social-item">
+          <span class="social-icon youtube">▶️</span>
+          <div class="social-text">
+            <span class="social-name">YouTube</span>
+            <span class="social-desc">To'liq videolar</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <script src="api.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
